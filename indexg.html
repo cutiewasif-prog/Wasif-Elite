@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WASIF ÉLITE — Luxury Picks</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --choc-dark: #1a0a00;
+    --choc-deep: #2d1200;
+    --choc-mid: #4a2000;
+    --choc-warm: #6b3310;
+    --choc-gold: #c8922a;
+    --choc-light-gold: #e8b86d;
+    --choc-cream: #f5e6c8;
+    --choc-pale: #fdf5e6;
+    --text-main: #f0d9b0;
+    --text-muted: #a07840;
+    --glass: rgba(74,32,0,0.35);
+    --glass-border: rgba(200,146,42,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--choc-dark);
+    color: var(--text-main);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--choc-gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--choc-gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.15s ease;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ========= ANIMATED BACKGROUND ========= */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(107,51,16,0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(74,32,0,0.8) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(45,18,0,0.9) 0%, transparent 70%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    0% { background: radial-gradient(ellipse at 20% 20%, rgba(107,51,16,0.6) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(74,32,0,0.8) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(45,18,0,0.9) 0%, transparent 70%); }
+    100% { background: radial-gradient(ellipse at 80% 30%, rgba(107,51,16,0.7) 0%, transparent 50%), radial-gradient(ellipse at 20% 70%, rgba(74,32,0,0.8) 0%, transparent 50%), radial-gradient(ellipse at 60% 50%, rgba(45,18,0,0.9) 0%, transparent 70%); }
+  }
+
+  /* Floating 3D Orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: floatOrb linear infinite;
+    pointer-events: none;
+  }
+  .orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,146,42,0.25), transparent); top: 10%; left: 5%; animation-duration: 20s; }
+  .orb-2 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(107,51,16,0.4), transparent); top: 60%; right: 10%; animation-duration: 15s; animation-delay: -7s; }
+  .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(45,18,0,0.5), transparent); bottom: 0; left: 30%; animation-duration: 25s; animation-delay: -13s; }
+
+  @keyframes floatOrb {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-40px) rotate(120deg); }
+    66% { transform: translateY(20px) rotate(240deg); }
+  }
+
+  /* Particle grid */
+  .particle-field {
+    position: absolute; inset: 0;
+    background-image: 
+      radial-gradient(circle, rgba(200,146,42,0.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: particleMove 30s linear infinite;
+  }
+  @keyframes particleMove {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  /* ========= LAYOUT ========= */
+  .site-wrap { position: relative; z-index: 1; min-height: 100vh; }
+
+  /* ========= HEADER ========= */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(26,10,0,0.7);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--choc-gold);
+    text-shadow: 0 0 30px rgba(200,146,42,0.5);
+  }
+  .logo span { color: var(--choc-cream); font-style: italic; font-weight: 400; }
+
+  .tagline {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 100;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ========= HERO ========= */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+  }
+
+  .hero-badge {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--choc-gold);
+    border: 1px solid var(--glass-border);
+    padding: 8px 20px;
+    margin-bottom: 30px;
+    animation: fadeInDown 1s ease forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1.05;
+    font-weight: 900;
+    color: var(--choc-cream);
+    margin-bottom: 20px;
+    animation: fadeInUp 1.2s ease forwards;
+  }
+  .hero-title em {
+    color: var(--choc-gold);
+    font-style: italic;
+    text-shadow: 0 0 60px rgba(200,146,42,0.4);
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    max-width: 500px;
+    animation: fadeInUp 1.4s ease forwards;
+    margin-bottom: 50px;
+  }
+
+  /* 3D floating diamonds */
+  .diamond-grid {
+    display: flex; gap: 20px; margin-bottom: 60px;
+    animation: fadeInUp 1.6s ease forwards;
+  }
+  .diamond {
+    width: 14px; height: 14px;
+    background: var(--choc-gold);
+    transform: rotate(45deg);
+    animation: diamondPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(200,146,42,0.6);
+  }
+  .diamond:nth-child(2) { animation-delay: 0.3s; background: var(--choc-light-gold); }
+  .diamond:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes diamondPulse {
+    0%, 100% { transform: rotate(45deg) scale(1); opacity: 0.8; }
+    50% { transform: rotate(45deg) scale(1.4); opacity: 1; }
+  }
+
+  @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+
+  /* ========= PRODUCTS SECTION ========= */
+  .section-header {
+    text-align: center;
+    padding: 80px 40px 40px;
+  }
+  .section-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--choc-gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--choc-cream);
+  }
+  .section-title em { color: var(--choc-gold); font-style: italic; }
+  .gold-line {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--choc-gold), transparent);
+    margin: 20px auto;
+  }
+
+  /* ========= PRODUCT GRID ========= */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 60px 100px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .product-card {
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    animation: cardReveal 0.6s ease forwards;
+    opacity: 0;
+  }
+  .product-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(200,146,42,0.15);
+    border-color: rgba(200,146,42,0.5);
+  }
+  @keyframes cardReveal {
+    from { opacity:0; transform: translateY(40px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  /* 3D corner accent */
+  .card-accent {
+    position: absolute; top: 0; right: 0;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, transparent 50%, rgba(200,146,42,0.3) 50%);
+    pointer-events: none;
+  }
+  .card-accent::after {
+    content: '';
+    position: absolute; top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background: var(--choc-gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px rgba(200,146,42,0.8);
+  }
+
+  .product-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: var(--choc-deep);
+  }
+  .product-image-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(26,10,0,0.8) 100%);
+    pointer-events: none;
+  }
+  .product-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .product-card:hover .product-img { transform: scale(1.08); }
+
+  .product-body {
+    padding: 24px 24px 28px;
+  }
+  .product-category {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--choc-gold);
+    margin-bottom: 8px;
+  }
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--choc-cream);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .product-desc {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* BUY NOW BUTTON */
+  .buy-btn {
+    display: block;
+    width: 100%;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--choc-gold) 0%, var(--choc-warm) 50%, var(--choc-gold) 100%);
+    background-size: 200% 200%;
+    color: var(--choc-dark);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background-position 0.4s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 4px 20px rgba(200,146,42,0.35);
+  }
+  .buy-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .buy-btn::after {
+    content: '✦ Shop on Amazon ✦';
+  }
+  .buy-btn:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 35px rgba(200,146,42,0.55);
+    color: var(--choc-dark);
+  }
+  .buy-btn:active { transform: translateY(0); }
+
+  /* ========= ADMIN PANEL ========= */
+  .admin-toggle {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 56px; height: 56px;
+    background: var(--choc-gold);
+    color: var(--choc-dark);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 500;
+    box-shadow: 0 4px 20px rgba(200,146,42,0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .admin-toggle:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 8px 35px rgba(200,146,42,0.7); }
+
+  .admin-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 480px;
+    height: 100vh;
+    background: rgba(26,10,0,0.97);
+    border-left: 1px solid var(--glass-border);
+    z-index: 600;
+    overflow-y: auto;
+    padding: 40px 30px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    backdrop-filter: blur(20px);
+  }
+  .admin-panel.open { transform: translateX(0); }
+
+  .admin-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--choc-gold);
+    margin-bottom: 6px;
+  }
+  .admin-sub {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+  }
+  .gold-line-sm { width: 40px; height: 1px; background: var(--choc-gold); margin-bottom: 30px; }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--choc-gold);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(74,32,0,0.3);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+    border-radius: 2px;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--choc-gold); }
+  .form-group textarea { height: 80px; resize: vertical; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--choc-gold), var(--choc-warm));
+    color: var(--choc-dark);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: opacity 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--choc-gold); color: var(--choc-gold); }
+
+  .product-list-admin { margin-top: 30px; }
+  .admin-product-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 8px;
+    border-radius: 2px;
+    background: rgba(74,32,0,0.15);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .admin-product-item:hover { border-color: var(--choc-gold); }
+  .admin-product-thumb {
+    width: 50px; height: 50px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+    background: var(--choc-mid);
+  }
+  .admin-product-info { flex: 1; min-width: 0; }
+  .admin-product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: var(--choc-cream);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .admin-product-cat {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .admin-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .btn-edit, .btn-delete {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    border: none;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+    letter-spacing: 0.1em;
+    transition: opacity 0.2s;
+  }
+  .btn-edit { background: rgba(200,146,42,0.2); color: var(--choc-gold); }
+  .btn-delete { background: rgba(150,30,30,0.2); color: #e07070; }
+  .btn-edit:hover, .btn-delete:hover { opacity: 0.7; }
+
+  .admin-close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: none;
+    color: var(--text-muted); font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .admin-close:hover { color: var(--choc-gold); }
+
+  .section-separator {
+    border: none; border-top: 1px solid var(--glass-border);
+    margin: 24px 0;
+  }
+
+  /* ========= FOOTER ========= */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--glass-border);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  footer .footer-brand { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--choc-gold); display: block; margin-bottom: 8px; }
+
+  /* Empty state */
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--text-muted);
+  }
+  .empty-state .big-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.4; }
+  .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--choc-cream); margin-bottom: 8px; }
+
+  /* 3D floating shapes */
+  .shape-float {
+    position: fixed; pointer-events: none; z-index: 0;
+    animation: shapeFloat 10s ease-in-out infinite;
+    opacity: 0.06;
+  }
+  .shape-1 {
+    width: 120px; height: 120px;
+    border: 2px solid var(--choc-gold);
+    top: 15%; left: 2%;
+    animation-duration: 12s;
+    transform-style: preserve-3d;
+  }
+  .shape-2 {
+    width: 80px; height: 80px;
+    background: var(--choc-gold);
+    top: 70%; right: 3%;
+    animation-duration: 8s;
+    animation-delay: -4s;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+  .shape-3 {
+    width: 60px; height: 60px;
+    border: 1px solid var(--choc-light-gold);
+    top: 40%; left: 1%;
+    border-radius: 50%;
+    animation-duration: 15s;
+    animation-delay: -8s;
+  }
+  @keyframes shapeFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+  }
+
+  @media (max-width: 768px) {
+    header { padding: 16px 24px; }
+    .products-grid { padding: 20px 24px 80px; }
+    .admin-panel { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Animated Background -->
+<div class="bg-canvas">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="particle-field"></div>
+</div>
+
+<!-- Floating 3D Shapes -->
+<div class="shape-float shape-1"></div>
+<div class="shape-float shape-2"></div>
+<div class="shape-float shape-3"></div>
+
+<div class="site-wrap">
+
+  <!-- Header -->
+  <header>
+    <div>
+      <div class="logo">WASIF <span>Élite</span></div>
+    </div>
+    <div class="tagline">Curated Luxury — Handpicked by Wasif</div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">✦ Exclusive Selections ✦</div>
+    <h1 class="hero-title">
+      Discover <em>Luxury</em><br>Beyond Ordinary
+    </h1>
+    <p class="hero-sub">Handpicked premium products curated with an eye for elegance</p>
+    <div class="diamond-grid">
+      <div class="diamond"></div>
+      <div class="diamond"></div>
+      <div class="diamond"></div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section>
+    <div class="section-header">
+      <span class="section-label">✦ The Collection ✦</span>
+      <h2 class="section-title">Featured <em>Picks</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Products rendered by JS -->
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-brand">WASIF Élite</span>
+    Curated Luxury Selections · Affiliate Partner
+  </footer>
+
+</div>
+
+<!-- Admin Toggle -->
+<button class="admin-toggle" id="adminToggle" title="Manage Products">⚙</button>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminPanel">
+  <button class="admin-close" id="adminClose">✕</button>
+  <h2 class="admin-title">Product Manager</h2>
+  <p class="admin-sub">✦ Add · Edit · Remove</p>
+  <div class="gold-line-sm"></div>
+
+  <div class="form-group">
+    <label>Product Name</label>
+    <input type="text" id="inp-name" placeholder="e.g. Royal Oud Perfume">
+  </div>
+  <div class="form-group">
+    <label>Category</label>
+    <input type="text" id="inp-cat" placeholder="e.g. Fragrance · Skincare · Watches">
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <textarea id="inp-desc" placeholder="Short description of the product..."></textarea>
+  </div>
+  <div class="form-group">
+    <label>Image URL</label>
+    <input type="text" id="inp-img" placeholder="https://example.com/image.jpg">
+  </div>
+  <div class="form-group">
+    <label>Amazon Affiliate Link</label>
+    <input type="text" id="inp-link" placeholder="https://www.amazon.com/dp/...?tag=yourtag-20">
+  </div>
+
+  <input type="hidden" id="editId">
+
+  <button class="btn-primary" id="saveBtn">✦ Save Product</button>
+  <button class="btn-secondary" id="clearBtn">Clear Form</button>
+
+  <hr class="section-separator">
+  <p style="font-family:'Josefin Sans',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">All Products</p>
+  <div class="product-list-admin" id="adminProductList"></div>
+</div>
+
+<script>
+// ============================================================
+// PRODUCT DATA — Easily edit products here or use Admin Panel
+// ============================================================
+let products = [
+  {
+    id: 1,
+    name: "Royal Oud Perfume",
+    category: "Fragrance",
+    desc: "A rich, smoky oud blend fit for royalty. Long-lasting 12+ hour wear.",
+    img: "https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80",
+    link: "https://www.amazon.com"
+  },
+  {
+    id: 2,
+    name: "Luxury Leather Watch",
+    category: "Timepieces",
+    desc: "Premium automatic movement with hand-stitched Italian leather strap.",
+    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
+    link: "https://www.amazon.com"
+  },
+  {
+    id: 3,
+    name: "Gold Skincare Set",
+    category: "Skincare",
+    desc: "24K gold-infused serum and moisturizer for radiant, youthful skin.",
+    img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80",
+    link: "https://www.amazon.com"
+  }
+];
+
+let nextId = 10;
+
+// ============================================================
+// RENDER PRODUCTS
+// ============================================================
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+
+  if (products.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="big-icon">✦</div>
+      <h3>No Products Yet</h3>
+      <p style="font-size:0.9rem;color:var(--text-muted)">Click ⚙ to add your first luxury pick</p>
+    </div>`;
+    return;
+  }
+
+  products.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.animationDelay = (i * 0.1) + 's';
+    card.innerHTML = `
+      <div class="card-accent"></div>
+      <div class="product-image-wrap">
+        <img class="product-img" src="${escHtml(p.img)}" alt="${escHtml(p.name)}" onerror="this.src='https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80'">
+      </div>
+      <div class="product-body">
+        <div class="product-category">${escHtml(p.category)}</div>
+        <h3 class="product-name">${escHtml(p.name)}</h3>
+        <p class="product-desc">${escHtml(p.desc)}</p>
+        <a class="buy-btn" href="${escHtml(p.link)}" target="_blank" rel="noopener"></a>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// RENDER ADMIN LIST
+// ============================================================
+function renderAdminList() {
+  const list = document.getElementById('adminProductList');
+  list.innerHTML = '';
+  if (products.length === 0) {
+    list.innerHTML = '<p style="font-size:0.8rem;color:var(--text-muted);text-align:center;padding:20px">No products added yet</p>';
+    return;
+  }
+  products.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'admin-product-item';
+    item.innerHTML = `
+      <img class="admin-product-thumb" src="${escHtml(p.img)}" alt="" onerror="this.src=''">
+      <div class="admin-product-info">
+        <div class="admin-product-name">${escHtml(p.name)}</div>
+        <div class="admin-product-cat">${escHtml(p.category)}</div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-edit" onclick="editProduct(${p.id})">Edit</button>
+        <button class="btn-delete" onclick="deleteProduct(${p.id})">Del</button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+// ============================================================
+// ADD / EDIT PRODUCT
+// ============================================================
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const name = document.getElementById('inp-name').value.trim();
+  const cat  = document.getElementById('inp-cat').value.trim();
+  const desc = document.getElementById('inp-desc').value.trim();
+  const img  = document.getElementById('inp-img').value.trim();
+  const link = document.getElementById('inp-link').value.trim();
+  const editId = document.getElementById('editId').value;
+
+  if (!name || !link) {
+    alert('Please fill in at least Product Name and Amazon Link.');
+    return;
+  }
+
+  if (editId) {
+    // Update existing
+    const idx = products.findIndex(p => p.id == editId);
+    if (idx !== -1) {
+      products[idx] = { id: parseInt(editId), name, category: cat || 'Product', desc, img, link };
+    }
+  } else {
+    // Add new
+    products.push({ id: nextId++, name, category: cat || 'Product', desc, img, link });
+  }
+
+  clearForm();
+  renderProducts();
+  renderAdminList();
+  saveToStorage();
+});
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('inp-name').value = p.name;
+  document.getElementById('inp-cat').value = p.category;
+  document.getElementById('inp-desc').value = p.desc;
+  document.getElementById('inp-img').value = p.img;
+  document.getElementById('inp-link').value = p.link;
+  document.getElementById('editId').value = p.id;
+  document.getElementById('saveBtn').textContent = '✦ Update Product';
+}
+
+function deleteProduct(id) {
+  if (!confirm('Remove this product?')) return;
+  products = products.filter(p => p.id !== id);
+  renderProducts();
+  renderAdminList();
+  saveToStorage();
+}
+
+function clearForm() {
+  ['inp-name','inp-cat','inp-desc','inp-img','inp-link','editId'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('saveBtn').textContent = '✦ Save Product';
+}
+document.getElementById('clearBtn').addEventListener('click', clearForm);
+
+// ============================================================
+// LOCAL STORAGE (persists products on reload)
+// ============================================================
+function saveToStorage() {
+  try { localStorage.setItem('wasif_elite_products', JSON.stringify(products)); } catch(e) {}
+}
+function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem('wasif_elite_products');
+    if (saved) { products = JSON.parse(saved); nextId = Math.max(...products.map(p=>p.id), 9) + 1; }
+  } catch(e) {}
+}
+
+// ============================================================
+// ADMIN PANEL TOGGLE
+// ============================================================
+document.getElementById('adminToggle').addEventListener('click', () => {
+  document.getElementById('adminPanel').classList.toggle('open');
+});
+document.getElementById('adminClose').addEventListener('click', () => {
+  document.getElementById('adminPanel').classList.remove('open');
+});
+
+// ============================================================
+// CUSTOM CURSOR
+// ============================================================
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let ringX = 0, ringY = 0, curX = 0, curY = 0;
+
+document.addEventListener('mousemove', e => {
+  curX = e.clientX; curY = e.clientY;
+  cursor.style.left = curX + 'px';
+  cursor.style.top = curY + 'px';
+});
+
+function animateRing() {
+  ringX += (curX - ringX) * 0.12;
+  ringY += (curY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    cursor.style.background = 'var(--choc-light-gold)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    cursor.style.background = 'var(--choc-gold)';
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadFromStorage();
+renderProducts();
+renderAdminList();
+</script>
+</body>
+</html>
